@@ -1,0 +1,220 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Booking Lapangan API",
+        "description": "API Booking Lapangan Olahraga menggunakan Laravel 12 dan Passport (client_credentials).",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Local Development Server"
+        }
+    ],
+    "paths": {
+        "/api/bookings/{id}": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Menandai booking digunakan",
+                "description": "Digunakan oleh petugas lapangan untuk menandai booking sudah dipakai.",
+                "operationId": "8c1f20e3b5f6964ab9da1eca224dc694",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unique code booking",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking berhasil ditandai digunakan"
+                    },
+                    "404": {
+                        "description": "Booking tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/partners/fields": {
+            "get": {
+                "tags": [
+                    "Partners"
+                ],
+                "summary": "Melihat ketersediaan lapangan",
+                "description": "Endpoint untuk melihat daftar lapangan beserta sisa kuota per tanggal. Digunakan oleh partner (M2M).",
+                "operationId": "2cf89ed87833cc1058e7f5c5b76f2dc9",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "date": {
+                                                "type": "string",
+                                                "example": "2025-12-16"
+                                            },
+                                            "field_name": {
+                                                "type": "string",
+                                                "example": "Lapangan Voli"
+                                            },
+                                            "remaining": {
+                                                "type": "integer",
+                                                "example": 9
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Partners"
+                ],
+                "summary": "Membuat booking lapangan",
+                "description": "Membuat booking lapangan berdasarkan field dan tanggal, sekaligus membuat invoice pembayaran.",
+                "operationId": "7885fc1db1da85d37515ef9c23bfed93",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "customer_name",
+                                    "email",
+                                    "booking_date",
+                                    "field_id"
+                                ],
+                                "properties": {
+                                    "customer_name": {
+                                        "type": "string",
+                                        "example": "Maman Kopling"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "maman@gmail.com"
+                                    },
+                                    "booking_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-16"
+                                    },
+                                    "field_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Booking berhasil dibuat"
+                    },
+                    "400": {
+                        "description": "Data tidak valid atau kuota penuh"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/partners/fields/book": {
+            "post": {
+                "tags": [
+                    "Partners"
+                ],
+                "summary": "Webhook pembayaran Xendit",
+                "description": "Endpoint webhook untuk menerima notifikasi pembayaran dari Xendit dan mengonfirmasi booking.",
+                "operationId": "14cf933ef613ac103774f862f1925fac",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "payment_id",
+                                    "external_id",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "payment_id": {
+                                        "type": "string",
+                                        "example": "pay_123456"
+                                    },
+                                    "external_id": {
+                                        "type": "string",
+                                        "example": "uuid-booking"
+                                    },
+                                    "user_id": {
+                                        "type": "string",
+                                        "example": "user_xendit"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Webhook berhasil diproses"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "passport": {
+                "type": "http",
+                "description": "Gunakan access token dari Passport client_credentials",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Bookings",
+            "description": "Bookings"
+        },
+        {
+            "name": "Partners",
+            "description": "Partners"
+        }
+    ]
+}
