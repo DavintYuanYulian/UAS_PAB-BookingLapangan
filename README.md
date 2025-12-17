@@ -53,30 +53,6 @@ Semua endpoint utama **dilindungi autentikasi**, kecuali endpoint webhook.
 
 ---
 
-## 📚 Struktur Data Utama
-
-### Field (Lapangan)
-- id
-- name
-- type
-- price
-
-### Field Schedule
-- field_id
-- schedule_date
-- booked
-- used
-
-### Booking
-- customer_name
-- email
-- field_schedule_id
-- is_booked
-- is_used
-- unique_code
-
----
-
 ## 🚀 Daftar Endpoint (Sesuai Ketentuan UAS)
 
 ### 1️⃣ GET /api/partners/fields
