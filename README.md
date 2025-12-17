@@ -6,31 +6,6 @@ API ini digunakan untuk mengelola **pemesanan lapangan olahraga** oleh sistem mi
 
 ---
 
-## 🎯 Tujuan Sistem
-
-Sistem ini bertujuan untuk:
-- Menyediakan informasi ketersediaan lapangan olahraga
-- Memfasilitasi proses booking lapangan oleh sistem mitra
-- Menangani konfirmasi pembayaran (simulasi webhook)
-- Menandai booking yang sudah digunakan di lapangan
-
----
-
-## 🧩 Studi Kasus
-
-Sebuah pengelola lapangan olahraga memiliki beberapa jenis lapangan, seperti:
-- Lapangan Voli  
-- Lapangan Badminton  
-- Lapangan Futsal  
-- Lapangan Basket  
-
-Setiap lapangan:
-- Memiliki **harga berbeda**
-- Memiliki **kuota maksimal booking per hari**
-- Dapat dipesan oleh sistem partner melalui API
-
----
-
 ## 🔐 Keamanan API
 
 API menggunakan **Laravel Passport** dengan skema:
